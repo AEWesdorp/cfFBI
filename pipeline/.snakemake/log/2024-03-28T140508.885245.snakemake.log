@@ -1,0 +1,11 @@
+FileNotFoundError in line 9 of /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/FBI_pipeline/workflow/rules/common.smk:
+[Errno 2] No such file or directory: './config/foals/unit_foal_sepsis_EquCabAll.txt'
+  File "/hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/FBI_pipeline/workflow/Snakefile_FOALS_NEW", line 16, in <module>
+  File "/hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/FBI_pipeline/workflow/rules/common.smk", line 9, in <module>
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/util/_decorators.py", line 211, in wrapper
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/util/_decorators.py", line 331, in wrapper
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 950, in read_csv
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 605, in _read
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1442, in __init__
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/parsers/readers.py", line 1735, in _make_engine
+  File "/hpc/compgen/users/ewesdorp/miniconda3/envs/snakemake/lib/python3.10/site-packages/pandas/io/common.py", line 856, in get_handle

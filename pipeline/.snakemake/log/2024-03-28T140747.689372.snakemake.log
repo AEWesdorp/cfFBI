@@ -1,0 +1,8 @@
+Building DAG of jobs...
+Conda environment workflow/envs/mapping.yaml will be created.
+Conda environment workflow/envs/bracken.yaml will be created.
+Conda environment workflow/envs/fastqc.yaml will be created.
+Conda environment workflow/envs/fastp.yaml will be created.
+WorkflowError:
+Failed to open source file /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/FBI_pipeline/workflow/envs/kracken.yaml
+FileNotFoundError: [Errno 2] No such file or directory: '/hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/FBI_pipeline/workflow/envs/kracken.yaml'
