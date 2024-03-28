@@ -1,2 +1,3 @@
 output/*/
 pipeline/.snakemake/
+figures/scripts/.ipynb_checkpoints/
