@@ -1,2 +1,2 @@
-output/01_pipeline/
+output/*/
 pipeline/.snakemake/
