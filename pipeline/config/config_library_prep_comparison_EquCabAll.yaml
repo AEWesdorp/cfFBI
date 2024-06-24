@@ -1,0 +1,48 @@
+## snakemake parameters
+units: ./config/units_library_prep_comparison.txt
+run_name: library_prep_comparison_EquCabAll/
+outdir: ../output/01_pipeline
+
+# AdapterRemoval
+adapter_removal:
+    trimqualities: True
+    minquality: 10
+    trimns: "--trimns"
+
+k_mer_length: 35
+
+reference_genome: EquCab_NCBI_combined_genomic
+reference_genome_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/github_cfspi/cfspi/resources/mapping/host/
+
+#kraken2
+database:
+- RS
+- EquRS
+- EquAllRS
+- spikeIns
+database_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/make_database/
+k2_threshold: 0.8
+
+#bracken
+level: S
+bracken:
+        read_length: 100
+        threshold: 1
+bracken_smpl_oi: [PC1, PC2, PC3]
+
+# adapters
+# https://teichlab.github.io/scg_lib_structs/methods_html/Illumina.html
+KAPA_single_index:
+  adapterP7_part1: GATCGGAAGAGCACACGTCTGAACTCCAGTCAC
+  adapterP7_part2: NNCTCGTATGCCGTCTTCTGCTTG
+  adapterP5: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGTAGATCTCGGTGGTCGCCGTATCATT
+SRSLY_dual_index:
+  adapterP7_part1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
+  adapterP7_part2: ATCTCGTATGCCGTCTTCTGCTTG
+  adapterP5_part1: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+  adapterP5_part2: GTGTAGATCTCGGTGGTCGCCGTATCATT
+IDT384UMI_dual_index:
+  adapterP7_part1: AGATCGGAAGAGCACACGTCTGAACTCCAGTCAC
+  adapterP7_part2: ATCTCGTATGCCGTCTTCTGCTTG
+  adapterP5_part1: AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT
+  adapterP5_part2: GTGTAGATCTCGGTGGTCGCCGTATCATT

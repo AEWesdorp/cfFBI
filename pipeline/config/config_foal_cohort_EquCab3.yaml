@@ -1,7 +1,7 @@
 ## snakemake parameters
-units: ./config/unit_foal_sepsis_EquCabAll.txt
-run_name: ../output/01_pipeline/foals_sepsis_EquCabAll/
-outdir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/ssdna-snakemake
+units: ./config/units_foal_cohort.txt
+run_name: foal_cohort_EquCab3/
+outdir: ../output/01_pipeline
 
 # AdapterRemoval
 adapter_removal:
@@ -11,24 +11,23 @@ adapter_removal:
 
 k_mer_length: 35
 
+reference_genome: GCF_002863925.1_EquCab3.0_genomic
+reference_genome_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/github_cfspi/cfspi/resources/mapping/host/
+
+#kraken2
 database:
-        #- RS
-        #- EquRS
+- RS
+- EquRS
 - EquAllRS
-  #- EquEPRSc2
-  #- EquAllEPRSc2
-  #- spikeIns
+- spikeIns
+database_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/make_database/
+k2_threshold: 0.8
 
-db_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/make_database/
-
-k2_threshold: [0.8]
-
+#bracken
 level: S
-
 bracken:
         read_length: 100
         threshold: 1
-
 bracken_smpl_oi: [PC1, PC2, PC3]
 
 # adapters

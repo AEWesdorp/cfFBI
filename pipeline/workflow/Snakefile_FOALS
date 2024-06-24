@@ -15,7 +15,6 @@ report: "report/workflow.rst"
 ### load rules ###
 include: "rules/common.smk"
 include: "rules/trim.smk"
-include: "rules/ref.smk"
 
 print("Unit file path:", config["units"])
 
@@ -371,7 +370,7 @@ rule g_host_mapping:
     log:
         log=opj(OUTDIR,"log/g_host_mapping/{sample_name}.log"),
     params:
-        reference = get_reference,
+        reference = config["reference_genome_dir"]+"/"+config["reference_genome"],
     threads: 32
     benchmark:
         opj(OUTDIR,"benchmark/g_host_mapping/{sample_name}.tsv"),
@@ -403,7 +402,7 @@ rule h_kraken2:
         unm_r1 = rules.g_host_mapping.output.host_unmpd_r1,
         unm_r2 = rules.g_host_mapping.output.host_unmpd_r2,
     params:
-        db = config["db_dir"]+"{database}",
+        db = config["database_dir"]+"{database}",
         threshold="{k2_threshold}", 
     output:
         k2_report_hm=opj(OUTDIR,"results/kraken2_report/after_host_mapping/{sample_name}_{database}_conf{k2_threshold}.report"),
@@ -438,7 +437,7 @@ rule i_bracken:
 	
 	done=touch(opj(OUTDIR,"done/i_bracken/{sample_name}_{database}_conf{k2_threshold}.done")),
     params:
-        db = config["db_dir"]+"{database}",
+        db = config["database_dir"]+"{database}",
 	rl = config['bracken']['read_length'],
         b_th = config['bracken']['threshold'],
         lvl = config['level'],

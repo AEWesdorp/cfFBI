@@ -1,0 +1,5 @@
+sample_name	library_prep	adapter_type	UDI	path_to_R1_R2	notes
+2105643Mod	SRSLY	SRSLY_dual_index	UDI01	/hpc/compgen/projects/cf-spi/cf-spi/raw/WES7863/F2105643Mod/	
+2105643ModBBSS	SRSLY	SRSLY_dual_index	UDI02	/hpc/compgen/projects/cf-spi/cf-spi/raw/WES7863/F2105643ModBBSS/	
+2105643Small	SRSLY	SRSLY_dual_index	UDI03	/hpc/compgen/projects/cf-spi/cf-spi/raw/WES7863/F2105643Small/	
+2105643SmallBBSS	SRSLY	SRSLY_dual_index	UDI04	/hpc/compgen/projects/cf-spi/cf-spi/raw/WES7863/F2105643SmallBBSS/	
