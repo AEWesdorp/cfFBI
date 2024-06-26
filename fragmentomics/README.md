@@ -10,6 +10,9 @@ In this project, we investigated the fragmentomics characteristics of horse-deri
 snakemake --configfile ./config/fragmentomics_library_prep_comparison_EquCabAll.yaml \
 --snakefile  ./processing/Snakemake_fragmentomics_host --profile ./profile/slurm --conda-frontend conda --use-conda
 
+snakemake --configfile ./config/fragmentomics_library_prep_comparison_EquCabAll.yaml \
+--snakefile  ./processing/Snakemake_fragmentomics_Cacnes --profile ./profile/slurm --conda-frontend conda --use-conda
+
 snakemake --configfile ./config/fragmentomics_library_prep_comparison_EquCab3.yaml \
 --snakefile  ./processing/Snakemake_fragmentomics_host --profile ./profile/slurm --conda-frontend conda --use-conda
 ```
