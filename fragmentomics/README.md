@@ -1,7 +1,4 @@
-
-#### Filtering reads at genus level (including daughters)
-
+#
 ```bash
-sh ./scripts/genusLevel_readExtraction.sh
+fragmentomics]$ snakemake --configfile ./config/fragmentomics_library_prep_comparison_EquCabAll.yaml --snakefile  ./processing/Snakemake_fragmentomics_host --profile ./profile/slurm --conda-frontend conda --use-conda
 ```
-output (*.fastq*) can be found `../output/04_fragmentomics/genus_level/*.fq`

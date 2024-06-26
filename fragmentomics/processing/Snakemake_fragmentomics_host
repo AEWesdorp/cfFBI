@@ -1,0 +1,171 @@
+# Fragmentomics analysis
+# Specify snakemake version
+from snakemake.utils import min_version
+from os.path import join as opj
+min_version("6.3.0")
+
+# This defines the sample name should never contain underscore to avoid confusing rule determination.
+wildcard_constraints:
+    sample_name='[^_\W]+'
+
+report: "report/workflow.rst"
+
+### load rules ###
+include: "rules/common.smk"
+
+print("Unit file path:", config["units"])
+
+###
+OUTDIR=config["outdir"]+"/"+config['run_name']
+
+# rules that doesn't require much computational time and power are defied as local rules
+# all the output files should be defined at rule all
+rule all:
+    input:
+        #git version
+        expand("{OUTDIR}git-version.log", OUTDIR=OUTDIR),
+
+        #example
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_MT_readCount.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_nonMT_readCount.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R1_MT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R1neg_MT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R1pos_MT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R1_nonMT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R1neg_nonMT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R1pos_nonMT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R2_MT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R2neg_MT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R2pos_MT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R2_nonMT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R2neg_nonMT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+        expand("{OUTDIR}results/host_TLEN_readCount/{sample_name}_R2pos_nonMT_TLEN_EndMotif.txt", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+
+localrules: all, get_version_control
+rule get_version_control:
+    output:
+        opj(OUTDIR, "git-version.log")
+    shell:
+        "echo git branch: > {output};"
+        "git branch >> {output};"
+        "echo ================================ >> {output};"
+        "echo git log: >> {output};"
+        "git log -1  >> {output};"
+        "echo ================================ >> {output};"
+        "echo git status: >> {output};"
+        "git status >> {output};"
+        "echo ================================ >> {output};"
+        "echo git diff: >> {output};"
+        "git diff  >> {output};"
+
+rule host_TLEN_readCount:
+    input:
+        h_bam_sorted=opj(OUTDIR, 'results/host_mapping/{sample_name}_alligned_host_pe_srt.bam'),
+
+    output:
+        tmp_sam=temp(opj(OUTDIR, 'results/tmp/{sample_name}_alligned_host_pe_sorted_QC.sam')),
+	tmp_bam=temp(opj(OUTDIR, 'results/tmp/{sample_name}_alligned_host_pe_sorted_QC.bam')),
+        tmp_bam_R1=temp(opj(OUTDIR, 'results/tmp/{sample_name}_alligned_host_pe_sorted_QC_R1.bam')),
+        tmp_bam_R2=temp(opj(OUTDIR, 'results/tmp/{sample_name}_alligned_host_pe_sorted_QC_R2.bam')),
+
+        h_c_MT=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_MT_readCount.txt'),
+        h_s_MT_R1=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R1_MT_TLEN_EndMotif.txt'),
+        h_s_MT_R1pos=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R1pos_MT_TLEN_EndMotif.txt'),
+        h_s_MT_R1neg=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R1neg_MT_TLEN_EndMotif.txt'),
+        h_s_MT_R2=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R2_MT_TLEN_EndMotif.txt'),
+        h_s_MT_R2pos=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R2pos_MT_TLEN_EndMotif.txt'),
+        h_s_MT_R2neg=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R2neg_MT_TLEN_EndMotif.txt'),
+
+        h_c_nonMT=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_nonMT_readCount.txt'),
+        h_s_nonMT_R1=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R1_nonMT_TLEN_EndMotif.txt'),
+        h_s_nonMT_R1pos=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R1pos_nonMT_TLEN_EndMotif.txt'),
+        h_s_nonMT_R1neg=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R1neg_nonMT_TLEN_EndMotif.txt'),
+        h_s_nonMT_R2=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R2_nonMT_TLEN_EndMotif.txt'),
+        h_s_nonMT_R2pos=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R2pos_nonMT_TLEN_EndMotif.txt'),
+        h_s_nonMT_R2neg=opj(OUTDIR, 'results/host_TLEN_readCount/{sample_name}_R2neg_nonMT_TLEN_EndMotif.txt'),
+
+    priority: 50
+    threads: 8
+    benchmark:
+        opj(OUTDIR,"benchmark/host_TLEN_readCount/{sample_name}.tsv"),
+    conda:
+        "envs/mapping.yaml",
+    params:
+        tmp_dir_sort=opj(OUTDIR, 'results/tmp/'),
+    resources:
+        mem_mb = 250000,
+        runtime_min = 240,
+        cpus = 8,
+        disk_mb = 250000,
+    shell:
+        """
+        samtools view -H {input.h_bam_sorted} > {output.tmp_sam};
+	samtools view -q 30 -f 1 -F 256 -F 2048 {input.h_bam_sorted} | awk 'BEGIN{{OFS="\t"}} $1 ~ /^@/ {{print; next}} {{if ($7=="=") {{print}}}}' >> {output.tmp_sam};
+	samtools view -bS {output.tmp_sam} -o {output.tmp_bam}; 
+        samtools view -c {output.tmp_bam} -L ./resources/foal_MT.txt > {output.h_c_MT};
+        samtools view -c {output.tmp_bam} -L ./resources/foal_nonMT.txt > {output.h_c_nonMT};
+
+        samtools view -f 64 -o {output.tmp_bam_R1} {output.tmp_bam};
+
+        samtools view -L ./resources/foal_MT.txt {output.tmp_bam_R1} | \
+        awk '{{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_MT_R1};
+
+        samtools view -L ./resources/foal_MT.txt {output.tmp_bam_R1} | \
+        awk '$9 > 0 {{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_MT_R1pos};
+
+        samtools view -L ./resources/foal_MT.txt {output.tmp_bam_R1} |
+        awk '$9 < 0 {{print $9, substr($10, length($10) - 2 , length($10) )}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_MT_R1neg};
+
+        samtools view -L ./resources/foal_nonMT.txt {output.tmp_bam_R1} | \
+        awk '{{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_nonMT_R1};
+
+        samtools view -L ./resources/foal_nonMT.txt {output.tmp_bam_R1} | \
+        awk '$9 > 0 {{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_nonMT_R1pos};
+
+        samtools view -L ./resources/foal_nonMT.txt {output.tmp_bam_R1} |
+        awk '$9 < 0 {{print $9, substr($10, length($10) - 2 , length($10) )}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_nonMT_R1neg};
+
+        samtools view -f 128 -o {output.tmp_bam_R2} {output.tmp_bam};
+
+        samtools view -L ./resources/foal_MT.txt {output.tmp_bam_R2} | \
+        awk '{{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_MT_R2};
+
+        samtools view -L ./resources/foal_MT.txt {output.tmp_bam_R2} | \
+        awk '$9 > 0 {{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_MT_R2pos};
+
+        samtools view -L ./resources/foal_MT.txt {output.tmp_bam_R2} |
+        awk '$9 < 0 {{print $9, substr($10, length($10) - 2 , length($10) )}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_MT_R2neg};
+
+        samtools view -L ./resources/foal_nonMT.txt {output.tmp_bam_R2} | \
+        awk '{{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_nonMT_R2};
+
+        samtools view -L ./resources/foal_nonMT.txt {output.tmp_bam_R2} | \
+        awk '$9 > 0 {{print $9, substr($10, 1, 3)}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_nonMT_R2pos};
+
+
+        samtools view -L ./resources/foal_nonMT.txt {output.tmp_bam_R2} |
+        awk '$9 < 0 {{print $9, substr($10, length($10) - 2 , length($10) )}}' | sort --parallel={resources.cpus} -T {params.tmp_dir_sort} |  uniq -c | \
+        awk 'BEGIN {{ OFS=","; print "TLEN,EndMotif,Count" }} {{print $2,$3,$1}}' > {output.h_s_nonMT_R2neg};
+        """
+
+onsuccess:
+    print("Workflow finished, no error")
+    shell("mail -s 'Job finished! Well done!' 'a.e.wesdorp@umcutrecht.nl' < {log}")
+onerror:
+    print("An error occurred")
+    shell("mail -s 'an error occurred' 'a.e.wesdorp@umcutrecht.nl' < {log}")

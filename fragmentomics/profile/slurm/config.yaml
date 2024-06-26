@@ -1,0 +1,16 @@
+jobs: 100
+cluster:
+  mkdir -p slurm_logs && 
+  sbatch -t {resources.runtime_min} --mem={resources.mem_mb}M --cpus-per-task {resources.cpus} --gres=tmpspace:{resources.disk_mb} -o slurm_logs/{rule}_{wildcards}-%j.stout.log -e slurm_logs/{rule}_{wildcards}-%j.error.log --parsable
+use-conda: True
+use-singularity: True
+latency-wait: 240
+restart-times: 3
+keep-going: True
+rerun-incomplete: True
+printshellcmds: True
+reason: True
+cluster-cancel: scancel
+show-failed-logs: True
+scheduler: greedy
+#cluster-status: "./status-sacct.sh" #  Use to handle timeout exception, do not forget to chmod +x

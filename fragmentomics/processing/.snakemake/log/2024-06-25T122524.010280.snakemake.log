@@ -1,0 +1,3 @@
+NameError in line 26 of /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/fragmentomics/processing/Snakemake_fragmentomics:
+name 'units' is not defined
+  File "/hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/fragmentomics/processing/Snakemake_fragmentomics", line 26, in <module>

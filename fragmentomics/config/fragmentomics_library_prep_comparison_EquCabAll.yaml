@@ -1,0 +1,4 @@
+## snakemake parameters
+units: ../pipeline/config/units_library_prep_comparison.txt
+run_name: library_prep_comparison_EquCabAll/
+outdir: ../output/01_pipeline

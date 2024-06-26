@@ -16,10 +16,9 @@ reference_genome_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/gith
 
 #kraken2
 database:
-- RS
 - EquRS
 - EquAllRS
-- spikeIns
+
 database_dir: /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/make_database/
 k2_threshold: 0.8
 
