@@ -1,5 +1,5 @@
 # Fragmentomics
-In this project, we investigated the fragmentomics characteristics of horse-derived cfDNA molecules. Specifically, after mapping to the host genome, we analyzed either the cfDNA template length or the cfDNA end-motif frequency at both the 5' and 3' ends. After processing the BAM files, we performed further post-processing in R, resulting in the following files:
+In this project, we investigated the fragmentomics characteristics of horse-derived cfDNA molecules. Specifically, after mapping to the host genome, we analyzed either the cfDNA template length or the cfDNA end-motif frequency. After processing the BAM files, we performed further post-processing in R, resulting in the following files:
 - !!!
 - !!!
 - !!!
