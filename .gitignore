@@ -1,5 +1,7 @@
 output/*/
-pipeline/.snakemake/
+output_figures/
 figures/scripts/.ipynb_checkpoints/
 pipeline/slurm_logs/
 fragmentomics/slurm_logs/
+pipeline/.snakemake/
+fragmentomics/.snakemake/
