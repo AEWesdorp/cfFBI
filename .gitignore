@@ -5,3 +5,4 @@ pipeline/slurm_logs/
 fragmentomics/slurm_logs/
 pipeline/.snakemake/
 fragmentomics/.snakemake/
+fragmentomics/post_processing/OLD_*
