@@ -1,0 +1,4 @@
+## snakemake parameters
+units: ../pipeline/config/units_foal_cohort.txt
+run_name: foal_cohort_EquCabAll/
+outdir: ../output/01_pipeline
