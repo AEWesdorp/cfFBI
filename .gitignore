@@ -6,3 +6,4 @@ fragmentomics/slurm_logs/
 pipeline/.snakemake/
 fragmentomics/.snakemake/
 fragmentomics/post_processing/OLD_*
+fragmentomics/post_processing/.ipynb_checkpoints/
