@@ -35,6 +35,7 @@ ggsave("../../output_figures/foal_nonMT_1mer_endmotif_heatmap.png", plot = foal_
        width = 7, height = 3, units = "in")
 ggsave("../../output_figures/foal_nonMT_1mer_endmotif_heatmap.pdf", plot = foal_nonMT_1mer_endmotif_heatmap, 
        width = 7, height = 3, units = "in")
+print("Done, part 1 of 2! Figures can be found here: ../../output_figures/foal_nonMT_1mer_endmotif_heatmap.*")
 
 options(repr.plot.width=7, repr.plot.height=7)
 foal_nonMT_2mer_endmotif_heatmap <- foal_nonMT_IS_meta %>% 
@@ -59,3 +60,4 @@ ggsave("../../output_figures/foal_nonMT_2mer_endmotif_heatmap.png", plot = foal_
        width = 7, height = 3, units = "in")
 ggsave("../../output_figures/foal_nonMT_2mer_endmotif_heatmap.pdf", plot = foal_nonMT_2mer_endmotif_heatmap, 
        width = 7, height = 3, units = "in")
+print("Done, part 2 of 2! Figures can be found here: ../../output_figures/foal_nonMT_2mer_endmotif_heatmap.*")
