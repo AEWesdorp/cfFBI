@@ -27,3 +27,4 @@ for (file in list.files(HOST_IN_EquAll, pattern = "[pos/neg]_nonMT_TLEN_EndMotif
     }
     fwrite(foal_nonMT_IS_meta, "../../output/04_fragmentomics/library_prep_comparison_EquCabAll_nonMT_IS_meta.csv", row.names = FALSE)
 }
+print("DONE! You can find the output here: ../../output/04_fragmentomics/library_prep_comparison_EquCabAll_nonMT_IS_meta.csv") 
