@@ -179,8 +179,8 @@ def get_MT(path_MT):
     return MT_load
 
 
-def parse_combined_kreport_genera(in_file,max_samples=10000):
-    df = pd.read_csv(in_file, header=42, sep='\t', skipinitialspace=True)
+def parse_combined_kreport_genera(in_file,max_samples=10000, header=0):
+    df = pd.read_csv(in_file, header=header, sep='\t', skipinitialspace=True)
     # Read in patientID and index table
     with open(in_file, 'r') as f:
         a = f.readlines(max_samples)
@@ -396,7 +396,8 @@ if __name__ == '__main__':
 
     # Note
     # For cfDNA and MT load, we can analyse all foals. For clinical results, exclude S08-2 because they are the same.
-    count_all, df_summary, samples_ordered = parse_combined_kreport_genera(args.kreport, )
+    # 41 = header number of samples + 7 controls + 2 rows extra in the table
+    count_all, df_summary, samples_ordered = parse_combined_kreport_genera(args.kreport, header=41)
     # Create
     taxid_dict = count_all[['taxid','name']].set_index('taxid', inplace = False)
 
@@ -439,6 +440,7 @@ if __name__ == '__main__':
     # Taxonomy level G, S
     dfs_per_genera = get_sub_tree(count_all, FID_ordered, taxonomy_level='G', )
     print(dfs_per_genera['Bacteria'].shape)
+    # FID for decontam
     decontam_bac_genera = prep_decontam(dfs_per_genera, clinical_stats_wetlab3, domain='Bacteria', subset_max_index=TOTAL_NUMBER_OF_FOAL_SEQUENCING_RUNS_plus1)
     decontam_bac_genera.to_csv(f'{args.output}/EquAllRS_08_bacteria_genera_for_decontam_taxid.csv', index=False)
     dfs_per_species = get_sub_tree(count_all, FID_ordered, taxonomy_level='S', )
