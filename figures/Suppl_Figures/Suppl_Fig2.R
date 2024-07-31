@@ -1,3 +1,11 @@
+## -----------------------------------------------------------------------------
+# Code accompanying the publication: "Bacterial cell-free DNA profiling reveals co-elevation of multiple bacteria in newborn septic foals"
+# Li-Ting Chen, Emmy Wesdorp et al. 
+
+# Please direct any questions or comments to a.e.wesdorp@umcutrecht.nl
+
+## -----------------------------------------------------------------------------
+
 require("ggpubr")
 require("tidyverse")
 require("Hmisc")
@@ -93,14 +101,14 @@ stat_test_Host <- merged_data_sel %>%
 effect_hostMapping_hostCount <- ggplot(merged_data_sel, aes(x = Host_mapping, y = value)) +
     geom_violin(width = 0.4, size = 1, fill = NA, col = "grey", alpha = 0.5) + 
     geom_dotplot(width = 0.6, binaxis = "y", stackdir = "center", dotsize = 0.42, fill = "grey") + 
-    theme_bw() + theme() + ggtitle("Host Mapped (using Bowtie2)") + 
+    theme_bw() + theme() + ggtitle("Unmapped, after host genome mapping (using Bowtie2)") + 
     labs(x = "Genome assembly\nused for host mapping", y = "% of QC reads, normalized", fill = "") + 
     stat_pvalue_manual(size = 5, stat_test_Host, label = "p", y.position = 1.1) 
 
 # Save as pdf & png -- Host Count
-ggsave("../../output_figures/effect_hostMapping_hostCount.png", plot = effect_hostMapping_hostCount, 
+ggsave("../../output_figures/SupplFig2_effect_hostMapping_hostCount.png", plot = effect_hostMapping_hostCount, 
        width = 6, height = 6, units = "in")
-ggsave("../../output_figures/effect_hostMapping_hostCount.pdf", plot = effect_hostMapping_hostCount, 
+ggsave("../../output_figures/SupplFig2_effect_hostMapping_hostCount.pdf", plot = effect_hostMapping_hostCount, 
        width = 6, height = 6, units = "in")
 print("Done, part 1 of 2! Figures can be found here: ../../output_figures/effect_hostMapping_hostCount.*")
 
@@ -134,8 +142,8 @@ effect_hostMapping_bactCount <- ggplot(merged_data_sel, aes(x = Bact_k2, y = val
     stat_pvalue_manual(size = 5, stat_test_Bact, label = "p", y.position = 1.001) 
 
 # Save as pdf & png -- Bacterial Count
-ggsave("../../output_figures/effect_hostMapping_bactCount.png", plot = effect_hostMapping_bactCount, 
+ggsave("../../output_figures/SupplFig2_effect_hostMapping_bactCount.png", plot = effect_hostMapping_bactCount, 
        width = 6, height = 6, units = "in")
-ggsave("../../output_figures/effect_hostMapping_bactCount.pdf", plot = effect_hostMapping_bactCount, 
+ggsave("../../output_figures/SupplFig2_effect_hostMapping_bactCount.pdf", plot = effect_hostMapping_bactCount, 
        width = 6, height = 6, units = "in")
 print("Done, part 2 of 2! Figures can be found here: ../../output_figures/effect_hostMapping_bactCount.*")
