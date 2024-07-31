@@ -110,7 +110,7 @@ ggsave("../../output_figures/SupplFig2_effect_hostMapping_hostCount.png", plot =
        width = 6, height = 6, units = "in")
 ggsave("../../output_figures/SupplFig2_effect_hostMapping_hostCount.pdf", plot = effect_hostMapping_hostCount, 
        width = 6, height = 6, units = "in")
-print("Done, part 1 of 2! Figures can be found here: ../../output_figures/effect_hostMapping_hostCount.*")
+print("Done, part 1 of 2! Figures can be found here: ../../SupplFig2_output_figures/effect_hostMapping_hostCount.*")
 
 # Add the relative comparison columns -- Bacterial Count
 merged_data_sel <- merged_data %>%
@@ -146,4 +146,4 @@ ggsave("../../output_figures/SupplFig2_effect_hostMapping_bactCount.png", plot =
        width = 6, height = 6, units = "in")
 ggsave("../../output_figures/SupplFig2_effect_hostMapping_bactCount.pdf", plot = effect_hostMapping_bactCount, 
        width = 6, height = 6, units = "in")
-print("Done, part 2 of 2! Figures can be found here: ../../output_figures/effect_hostMapping_bactCount.*")
+print("Done, part 2 of 2! Figures can be found here: ../../SupplFig2_output_figures/effect_hostMapping_bactCount.*")
