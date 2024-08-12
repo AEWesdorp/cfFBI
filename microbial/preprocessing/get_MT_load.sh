@@ -7,8 +7,8 @@ fi
 
 MIN_MQ=10
 CHROM_LOC='NC_001640.1:1-16660'
-input_folder="$1" #./output/01_pipeline/foals_sepsis_EquCabAll/results/host_mapping
-output_file="$2" # ./output/02_tables/00_pipeline_postprocess/MT_DNA_load/mito_minMQ
+input_folder="$1" #<PATH_FBI>/output/01_pipeline/foal_cohort_EquCab3/results/host_mapping
+output_file="$2" # <PATH_FBI>/output/02_tables/00_pipeline_postprocess/MT_DNA_load/mito_minMQ40.txt
 
 # Check if the input folder exists
 if [ ! -d "$input_folder" ]; then

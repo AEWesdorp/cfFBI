@@ -2,61 +2,11 @@ import argparse
 import numpy as np
 import collections
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import scipy
-from scipy.stats import f
 from collections import defaultdict
 import os
 
-# ## FIXED PARAMETER
-# CID2 = ['H01', 'H02', 'H03', 'S01', 'S02', 'S03', 'NS01', 'NS02', 'S04', 'S05', 'S06', 'H04', 'S07', 'S08-1', 'S08-2',
-#        'S09', 'S10', 'S11', 'NS03', 'S12', 'S13', 'NS04', 'S14', 'NS05', 'S15', 'NS06', 'S16', 'S17', 'NS07', 'H05',
-#        'H06', 'H07', 'H08', 'NC1MQiso', 'NC1MQlib', 'NTC1', 'NTC2', 'PC1', 'PC2', 'PC3']
-
-# Gram Negative and Gram positive pathogens frequently found in culture of sepsis foals
-frequent_pathogen_n = ['Serratia',
-                     'Salmonella',
-                     'Pseudomonas',
-                     'Proteus',
-                     'Pasteurella',
-                     'Pantoea',
-                     'Klebsiella',
-                     'Escherichia',
-                     'Enterobacter',
-                     'Aeromonas',
-                     'Actinobacillus',
-                     'Acinetobacter',]
-frequent_pathogen_p = ['Streptococcus',
-                       'Staphylococcus',
-                       'Enterococcus',
-                       'Bacillus']
 
 ## Add labels of culture results + disease type
-def disease_class_culture(input_value):
-    disease_state = {"NEGATIVE CULTURE - CLINICAL SUSPICION OF SEPSIS": "SepsisCulture(-)",
-                     "POSITIVE CULTURE + SEPSIS": "SepsisCulture(+)",
-                     "HEALTHY CONTROL": "H",
-                     "NEGATIVE CULTURE - NOT SEPSIS SUSPECTED": "NotSepsisHC",
-                     "POSITIVE CULTURE - NOT SUSPECTED OF SEPSIS (CONTAMINATION OR BACTEREMIA?)": "NotSepsisCul(+)contamination",
-                     "NO CULTURE - NOT SEPSIS SUSPECTED (EHV-1 infection)": "HC_EHV-1",
-                     "NO CULTURE - NOT SEPSIS SUSPECTED": "NotSepsisHC", }
-
-    return disease_state[input_value]
-
-
-## Add labels of disease type
-def disease_class2(input_value):
-    disease_state = {"NEGATIVE CULTURE - CLINICAL SUSPICION OF SEPSIS": "S",
-                     "POSITIVE CULTURE + SEPSIS": "S",
-                     "HEALTHY CONTROL": "H",
-                     "NEGATIVE CULTURE - NOT SEPSIS SUSPECTED": "NS",
-                     "POSITIVE CULTURE - NOT SUSPECTED OF SEPSIS (CONTAMINATION OR BACTEREMIA?)": "NS",
-                     "NO CULTURE - NOT SEPSIS SUSPECTED (EHV-1 infection)": "NS",
-                     "NO CULTURE - NOT SEPSIS SUSPECTED": "NS", }
-
-    return disease_state[input_value]
-
 def get_FID_from_disease_class(df, special_id_list):
     disease_states = df['nSIRS_class']
     index_numbering = 0
@@ -81,31 +31,6 @@ def get_FID_from_disease_class(df, special_id_list):
             index_numbering += 1
     return FID
 
-
-def get_CID_from_disease_class(df, special_id_list):
-    disease_states = df['disease_state']
-    index_numbering = collections.Counter()
-    patient_CID = []
-    special_index = 1
-    for i, patientID in enumerate(list(df['patientID'])):
-        category = list(disease_states)[i]
-        if patientID in special_id_list:
-            digit2 = (index_numbering[category]+1 ) // 10
-            digit1 = (index_numbering[category]+1 ) % 10
-            patient_CID.append(f"{category}{digit2}{digit1}-{special_index}")
-            if special_index == len(special_id_list):
-                index_numbering[category] += 1
-            special_index += 1
-
-
-        elif category is np.nan:
-            patient_CID.append(list(df['patientID'])[i])
-        else:
-            digit2 = (index_numbering[category]+1 ) // 10
-            digit1 = (index_numbering[category]+1 ) % 10
-            patient_CID.append(f"{category}{digit2}{digit1}")
-            index_numbering[category] += 1
-    return patient_CID
 
 def makedir(path1):
     if not os.path.exists(path1):
@@ -202,8 +127,6 @@ def parse_combined_kreport_genera(in_file,max_samples=10000, header=0):
     # Get the amount of all nodes including sub-trees
     count_all = df[df.filter(like='_all').columns].copy()
     count_all.loc[:, ['#perc', 'lvl_type', 'taxid', 'name']] = df.loc[:, ['#perc', 'lvl_type', 'taxid', 'name']].copy()
-    ## Alternative: Get the amount of all nodes exactly only each node
-    ## count_exact_level = df[df.filter(like='_lvl').columns].copy()
 
     # Select for genera only
     rows_to_keep = []
@@ -329,7 +252,6 @@ if __name__ == '__main__':
     # 1-2 = nS-
     # 0 = sS-
 
-#    SPECIAL_ID_LIST = ['21048121', '21048122',]
     SPECIAL_ID_LIST = []
     TOTAL_NUMBER_OF_FOAL_SAMPLES_plus1 = 32
     TOTAL_NUMBER_OF_FOAL_SEQUENCING_RUNS_plus1 = 32
@@ -339,11 +261,6 @@ if __name__ == '__main__':
     # Read clinical, add disease classes
     clinical = pd.read_csv(args.clinical, skipinitialspace=True)
     clinical.drop(columns = ['Clinical Assessment'], inplace = True)
-    # clinical['disease_state_culture'] = clinical['Clinical Assessment'].apply(disease_class_culture)
-    # clinical['disease_state'] = clinical['Clinical Assessment'].apply(disease_class2)
-    # temp = (clinical.T)
-    # temp.insert(0, 'subtable', ['clinical']* clinical.shape[1])
-    # clinical = temp.T
 
     # Read stats (Quality filter, spike-in count, Mapped/Unmapped)
     df_stats = get_stats_table(args.stats)
@@ -351,7 +268,7 @@ if __name__ == '__main__':
     # Get Mitochondrial reads and merge to stats table
     MT_load = get_MT(args.MT)
     df_stats = df_stats.join(MT_load['MT_reads'])
-    # Exclude foal 21048122 becuase it was a second timepoint after treatment
+    # Exclude foal 21048122 becuase it was a second timepoint after treatment. Excluded from this manuscript.
     df_stats = df_stats[df_stats.index != '21048122']
     # Create CID
     clinical_stats = pd.merge(df_stats, clinical, on='patientID', how='left', )
@@ -395,7 +312,6 @@ if __name__ == '__main__':
     clinical_stats_wetlab3 = clinical_stats_wetlab3.merge(wetlab_PREP, on = 'patientID', how='left')
 
     # Note
-    # For cfDNA and MT load, we can analyse all foals. For clinical results, exclude S08-2 because they are the same.
     # 41 = header number of samples + 7 controls + 2 rows extra in the table
     count_all, df_summary, samples_ordered = parse_combined_kreport_genera(args.kreport, header=41)
     # Create
@@ -441,19 +357,18 @@ if __name__ == '__main__':
     dfs_per_genera = get_sub_tree(count_all, FID_ordered, taxonomy_level='G', )
     print(dfs_per_genera['Bacteria'].shape)
     # FID for decontam
-    decontam_bac_genera = prep_decontam(dfs_per_genera, clinical_stats_wetlab3, domain='Bacteria', subset_max_index=TOTAL_NUMBER_OF_FOAL_SEQUENCING_RUNS_plus1)
-    decontam_bac_genera.to_csv(f'{args.output}/EquAllRS_08_bacteria_genera_for_decontam_taxid.csv', index=False)
+#    decontam_bac_genera = prep_decontam(dfs_per_genera, clinical_stats_wetlab3, domain='Bacteria', subset_max_index=TOTAL_NUMBER_OF_FOAL_SEQUENCING_RUNS_plus1)
+#    decontam_bac_genera.to_csv(f'{args.output}/EquAllRS_08_bacteria_genera_for_decontam_taxid.csv', index=False)
     dfs_per_species = get_sub_tree(count_all, FID_ordered, taxonomy_level='S', )
     print(dfs_per_species['Bacteria'].shape)
 
 
-    decontam_bac_species = prep_decontam(dfs_per_species, clinical_stats_wetlab3, domain='Bacteria', subset_max_index=TOTAL_NUMBER_OF_FOAL_SEQUENCING_RUNS_plus1)
+#    decontam_bac_species = prep_decontam(dfs_per_species, clinical_stats_wetlab3, domain='Bacteria', subset_max_index=TOTAL_NUMBER_OF_FOAL_SEQUENCING_RUNS_plus1)
     # interchange taxid -> name for columns in decontam table
-    decontam_bac_species.to_csv(f'{args.output}/EquAllRS_08_bacteria_species_for_decontam_taxid.csv', index=False)
+    # Below not used. We apply decontam on all species
+#    decontam_bac_species.to_csv(f'{args.output}/EquAllRS_08_bacteria_species_for_decontam_taxid.csv', index=False)
     #metadata_columns =  ['CID', 'Yield', 'isolation_batch', 'prep_n', 'strip_n', 'total_filtered_effective_reads', ]
-    ## All
-
-#    decontam_all_species = prep_decontam(df_species, clinical_stats_wetlab3, domain='all')
+    ## All species
     df_species_taxid = df_species.copy()
     # interchange taxid -> name for columns in decontam table
     df_species_taxid.columns = df_species_taxid.loc['taxid']

@@ -1,3 +1,5 @@
+output-figures
+output/
 output/*/
 output_figures/
 figures/scripts/.ipynb_checkpoints/
@@ -7,3 +9,4 @@ pipeline/.snakemake/
 fragmentomics/.snakemake/
 fragmentomics/post_processing/OLD_*
 fragmentomics/post_processing/.ipynb_checkpoints/
+.idea
