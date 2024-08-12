@@ -26,7 +26,7 @@ sepsis_genera <- c(sepsis_grampositive, sepsis_gramnegative)
 
 ## -----------------------------------------------------------------------------
 all_basic_stats <- read.csv(file = "../../output/02_tables/02_data_merged/all_basic_stats.csv") %>% as.data.frame()
-fig3_basics = read.csv(file = "../../output/02_tables/04_source_data/fig3_combined_long.csv") %>% as.data.frame()
+fig3_basics = read.csv(file = "../../output/02_tables/04_source_data/contaminantFree_bacteria_long_inc_batched.csv") %>% as.data.frame()
 
 ## -----------------------------------------------------------------------------
 ## Removal of the contaminants
