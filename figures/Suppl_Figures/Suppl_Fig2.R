@@ -89,8 +89,8 @@ merged_data_sel <- reshape2::melt(merged_data_sel, id.vars = "sample_id") %>%
     mutate(
         Host_mapping = gsub("rel2_Host_", "", variable),
         Host_mapping = ifelse(variable == "rel2_Host_EquCab3", "EquCab3.0", Host_mapping),
-        Host_mapping = ifelse(variable == "rel2_Host_EquCabAll", "EquCab NCBI all 10", Host_mapping),
-        Host_mapping = factor(Host_mapping, levels = c("EquCab3.0", "EquCab NCBI all 10"))
+        Host_mapping = ifelse(variable == "rel2_Host_EquCabAll", "EquCab NCBI all 11", Host_mapping),
+        Host_mapping = factor(Host_mapping, levels = c("EquCab3.0", "EquCab NCBI all 11"))
     )
 
 # Plot the data -- Host Count
@@ -125,8 +125,8 @@ merged_data_sel <- reshape2::melt(merged_data_sel, id.vars = "sample_id") %>%
     mutate(
         Bact_k2 = gsub("rel2_Bact_", "", variable),
         Bact_k2 = ifelse(variable == "rel2_Bact_EquCab3", "EquCab3.0", Bact_k2),
-        Bact_k2 = ifelse(variable == "rel2_Bact_EquCabAll", "EquCab NCBI all 10", Bact_k2),
-        Bact_k2 = factor(Bact_k2, levels = c("EquCab3.0", "EquCab NCBI all 10"))
+        Bact_k2 = ifelse(variable == "rel2_Bact_EquCabAll", "EquCab NCBI all 11", Bact_k2),
+        Bact_k2 = factor(Bact_k2, levels = c("EquCab3.0", "EquCab NCBI all 11"))
     )
 
 # Plot the data -- Bacterial Count
