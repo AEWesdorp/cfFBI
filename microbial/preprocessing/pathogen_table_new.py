@@ -1,3 +1,5 @@
+# Instruction to self: Use py310 env
+
 import pandas as pd
 
 
@@ -111,9 +113,11 @@ if __name__ == '__main__':
 
     contam_merged_filter_prevalence = contam_merged.loc[contam_merged.index.isin(indexes_high_prev)]
     # Subset columns
+    # contaminants_table_1 = contam_merged_filter_prevalence[
+    #     ['p_conIsolation related', 'p_conIsolation related batched', 'p_conLibrary prep related',
+    #      'p_conLibrary prep related batched', 'freq_conIsolation related']].copy()
     contaminants_table_1 = contam_merged_filter_prevalence[
-        ['p_conIsolation related', 'p_conIsolation related batched', 'p_conLibrary prep related',
-         'p_conLibrary prep related batched', 'freq_conIsolation related']].copy()
+        ['p_conIsolation related', 'p_conLibrary prep related','freq_conIsolation related']].copy()
 
     # 2. sort the two columns
     contaminants_table = contaminants_table_1.sort_values(
@@ -122,30 +126,30 @@ if __name__ == '__main__':
     # 3. test if either one is smaller than cutoff
     contaminants_table['Isolation related contaminant (p<0.25)'] = contaminants_table[
         'p_conIsolation related'].apply(lambda x: x < CUTOFF)
-    contaminants_table['Isolation batch related contaminant (p<0.25)'] = contaminants_table[
-        'p_conIsolation related batched'].apply(lambda x: x < CUTOFF)
+    # contaminants_table['Isolation batch related contaminant (p<0.25)'] = contaminants_table[
+    #     'p_conIsolation related batched'].apply(lambda x: x < CUTOFF)
     contaminants_table['Library prep related contaminant (p<0.25)'] = contaminants_table[
         'p_conLibrary prep related'].apply(lambda x: x < CUTOFF)
-    contaminants_table['Library prep batch related contaminant (p<0.25)'] = contaminants_table[
-        'p_conLibrary prep related batched'].apply(lambda x: x < CUTOFF)
-    contaminants_table['Contaminants not batched'] = contaminants_table[
+    # contaminants_table['Library prep batch related contaminant (p<0.25)'] = contaminants_table[
+    #     'p_conLibrary prep related batched'].apply(lambda x: x < CUTOFF)
+    contaminants_table['Contaminants'] = contaminants_table[
                                                             'Isolation related contaminant (p<0.25)'] + \
                                                         contaminants_table[
                                                             'Library prep related contaminant (p<0.25)']
-    contaminants_table['Contaminants batched'] = contaminants_table[
-                                                        'Isolation batch related contaminant (p<0.25)'] + \
-                                                    contaminants_table[
-                                                        'Library prep batch related contaminant (p<0.25)']
-    contaminants_table['Contaminants'] = contaminants_table['Contaminants batched'] + contaminants_table[
-        'Contaminants not batched']
+    # contaminants_table['Contaminants batched'] = contaminants_table[
+    #                                                     'Isolation batch related contaminant (p<0.25)'] + \
+    #                                                 contaminants_table[
+    #                                                     'Library prep batch related contaminant (p<0.25)']
+#    contaminants_table['Contaminants'] = contaminants_table['Contaminants batched'] + contaminants_table[
+#        'Contaminants not batched']
 
-    contaminants_table.to_csv('../../output/02_tables/03_intermediate/decontam_species_joint_batched.csv')
+    contaminants_table.to_csv('../../output/02_tables/03_intermediate/decontam_species_joint_not_batched.csv')
     contaminants_table = contaminants_table.reset_index()
     contaminants = contaminants_table[contaminants_table['Contaminants'] == True]['name'].values
     contaminants_iso = contaminants_table[contaminants_table['Isolation related contaminant (p<0.25)'] == True]['name'].values
     contaminants_prep = contaminants_table[contaminants_table['Library prep related contaminant (p<0.25)'] == True]['name'].values
-    contaminants_iso_batched = contaminants_table[contaminants_table['Isolation batch related contaminant (p<0.25)'] == True]['name'].values
-    contaminants_prep_batched = contaminants_table[contaminants_table['Library prep batch related contaminant (p<0.25)'] == True]['name'].values
+#    contaminants_iso_batched = contaminants_table[contaminants_table['Isolation batch related contaminant (p<0.25)'] == True]['name'].values
+#    contaminants_prep_batched = contaminants_table[contaminants_table['Library prep batch related contaminant (p<0.25)'] == True]['name'].values
 
 
     # Melt bacteria count per sample per species
@@ -156,9 +160,9 @@ if __name__ == '__main__':
     merged_df = pd.merge(bac_melted, bac_normalized_melted, on=['Species', 'FID'])
     merged_df['Genus'] = merged_df['Species'].apply(lambda x: x.split(' ')[0])
     merged_df['Isolation related contaminant (p<0.25)'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants_iso))
-    merged_df['Isolation batch related contaminant (p<0.25)'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants_iso_batched))
+#    merged_df['Isolation batch related contaminant (p<0.25)'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants_iso_batched))
     merged_df['Library prep related contaminant (p<0.25)'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants_prep))
-    merged_df['Library prep batch related contaminant (p<0.25)'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants_prep_batched))
+#    merged_df['Library prep batch related contaminant (p<0.25)'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants_prep_batched))
 
     merged_df['Contaminant'] = merged_df['Species'].apply(lambda x : is_contam(x, contaminants))
     # Add column more than 10
@@ -191,25 +195,6 @@ if __name__ == '__main__':
     merged_df['higher_than_nS-_S'] = merged_df.apply(lambda row: is_higher_than_double_threshold(row, max_nS_S_dict),
                                                      axis=1)
 
-    merged_df.to_csv('../../output/02_tables/04_source_data/contaminantFree_bacteria_long_inc_batched.csv', index=False)
-
-    # Select contaminant False, filter >=10, larger than H. Examples: (These are done in R downstream)
-    # frequent_pathogen_df = pd.read_csv('../../output/02_tables/01_raw_converted_csv/frequently_cultured_genera_in_septic_foals.csv')
-    # frequent_pathogen = frequent_pathogen_df['genera'].values.tolist()
-
-    # filtered_freq_df = merged_df[(merged_df['Contaminant'] is False ) & \
-    #                     (merged_df[f'Exact_count_morethaninc_{THRESHOLD}'] is True) & \
-    #                     (merged_df['Genus'].isin(frequent_pathogen))
-    #                     ]
-    # filtered_freq_df_higher_than_H = filtered_freq_df['higher_than_H'].copy()
-    # filtered_freq_df_higher_than_H_nS = filtered_freq_df['higher_than_H_nS-'].copy()
-    # filtered_freq_df_higher_than_H_nS.to_csv('../../output/02_tables/04_source_data/bac_genera_merged_filtered_H_nS-_background_NEW.csv')
-    #
-    # not_filtered_freq_df = merged_df[(merged_df['Contaminant'] is False) & \
-    #                              (merged_df['Genus'].isin(frequent_pathogen))
-    #                              ]
-    # not_filtered_freq_df_higher_than_H = not_filtered_freq_df['higher_than_H'].copy()
-    # not_filtered_freq_df_higher_than_H_nS = not_filtered_freq_df['higher_than_H_nS-'].copy()
-    # not_filtered_freq_df_higher_than_H_nS.to_csv('../../output/02_tables/04_source_data/bac_genera_merged_notmorethan10_H_nS-_background_NEW.csv')
+    merged_df.to_csv('../../output/02_tables/04_source_data/contaminantFree_bacteria_long.csv', index=False)
 
 

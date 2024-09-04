@@ -191,8 +191,8 @@ if __name__ == '__main__':
 
     septic_group = df[df['nSIRS_class'] == 'S+'].copy()
 
-    fig2_data = df[['FID', 'patientID', 'Total cfDNA conc. in plasma (ng/ml)', 'Foal MT cfDNA conc. in plasma (ng/ml)',
-                    'Foal MT cfDNA fraction', 'Bacterial fraction', ]][:33]
+    fig2_data = df[['FID', 'nSIRS_class', 'patientID', 'Total cfDNA conc. in plasma (ng/ml)', 'Foal MT cfDNA conc. in plasma (ng/ml)',
+                    'Foal MT cfDNA fraction', 'Bacterial fraction', ]][:32]
     fig2_data.to_csv('../../output/03_microbial/source_data/Fig2ABCD.csv')
 
     # Define your data
@@ -251,13 +251,16 @@ if __name__ == '__main__':
     grouped_df['Lived'] = grouped_df['FID'].apply(lambda x: complete.to_dict()['Lived'][x])
     replacement = {'Y': 'S+ Lived', 'N': 'S+ Died'}
     grouped_df['Lived'].replace(replacement, inplace=True)
-
     custom_palettes = [['#6066B6', '#7CA2C2', '#A84750'], ['#e35f6c', '#85363e']]
     categories = ['R1', 'R2']
     hues = ['nSIRS_class', 'Lived']
     out_path3 = "../../output/03_microbial/figures/Fig2CDGH_EndMotif_GRID_test.pdf"
     plot_grouped_bar_with_hue(categories, hues, grouped_df, custom_palettes, out_path3)
-
+    export_end_motif_pivot = grouped_df.pivot(index=['FID'], columns=['EndMotif', 'End'], values=['sCount', 'nsCount'])
+    out_path4 = "../../output/02_tables/04_source_data/EndMotif_table_pivot.csv"
+    export_end_motif_pivot.to_csv(out_path4)
+    out_path5 = "../../output/02_tables/04_source_data/EndMotif_table_long.csv"
+    grouped_df.to_csv(out_path5)
     # 3. Plot covariance
 
     order_prep_n = ['Srsly prep 1', 'Srsly prep 2', 'Srsly prep 3']
