@@ -1,2 +1,3 @@
-# FBI
-**F**oal-specific cell-**F**ree DNA sequencing for **B**acterial **I**dentification
+# <ins>cf<ins>FBI
+**F**oal **c**ell-**f**ree DNA sequencing for **B**acterial **I**dentification 
+

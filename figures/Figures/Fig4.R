@@ -48,7 +48,7 @@ co_elevation_Splus <- rbind(data, metadata) %>%
         ggplot(aes(x = FID, y = variable)) +
             geom_point(col = NA) + 
             geom_point(data = . %>% filter(facets != "metadata") %>% filter(sum_rel_abundance != 0)  %>% 
-                           filter(tmp_col %in% c("H", "H & nS-")) , 
+                           filter(tmp_col %in% c("H & nS-")) , 
                        aes(x = FID, y = variable, size = -log10(sum_rel_abundance), col = tmp_col, shape = tmp_col)) + 
             geom_text(data = . %>% filter(facets == "metadata") %>% filter(!is.na(label)),
                       aes(x = FID, y = variable, label = label), size = 3) + 

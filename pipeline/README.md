@@ -1,7 +1,7 @@
-# FBI-pipeline
-This repository contains the computational pipeline for cell-**f**ree DNA sequencing for **b**acteria **i**dentification, also known as **FBI**, an open-source data analysis Snakemake workflow designed for bacterial profiling of foals' liquid biopsy plasma samples. The FBI-pipeline processes paired-end Illumina sequencing data.
+# cfFBI-pipeline
+This repository contains the computational pipeline for cell-**f**ree DNA sequencing for **b**acteria **i**dentification, also known as **FBI**, an open-source data analysis Snakemake workflow designed for bacterial profiling of foals' liquid biopsy plasma samples. The cfFBI-pipeline processes paired-end Illumina sequencing data.
 
-#### FBI-Pipeline Overview:
+#### cfFBI-Pipeline Overview:
 1. **Removal of Synthetic Spike-in Reads:** Reads from synthetic spike-in sequences (50, 100, and 150 bp) are removed using *bbduk.sh* from *BBMap*.
 2. **Duplicate Removal:** Duplicates are removed using *Nubeam*.
 3. **Quality Control and Filtering:** High-quality sequencing data is generated using *fastp*, which removes low-quality reads and applies a low complexity filter. Adapter sequences and short reads (<35 bp) are removed using *AdapterRemoval*.
@@ -10,7 +10,7 @@ This repository contains the computational pipeline for cell-**f**ree DNA sequen
 6. **Taxonomic Abundance Estimation:** For a select set of positive control samples, taxonomic abundance is estimated using *Bracken*.
 
 ## Getting started
-To use the FBI-pipeline, follow these steps: 
+To use the cfFBI-pipeline, follow these steps: 
 
 ### Prerequisites
 1. Ensure you have either `conda` installed on your system.
@@ -18,16 +18,16 @@ To use the FBI-pipeline, follow these steps:
 ### Installation
 1. Clone the GitHub Repository:
     ```bash
-    git clone https://github.com/AEWesdorp/FBI.git
+    git clone https://github.com/AEWesdorp/cfFBI.git
     ```
 2. Install Snakemake:
    follow the installation instructions on the [Snakemake website](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html)
 3. Create and Activate a Conda Environment:
     ```bash
-    # Create a new empty environment called "FBI_env"
-    conda create -c conda-forge -c bioconda -n FBI_env snakemake
-    # Activate the environment "FBI_env"
-    conda activate FBI_env
+    # Create a new empty environment called "cfFBI_env"
+    conda create -c conda-forge -c bioconda -n cfFBI_env snakemake
+    # Activate the environment "cfFBI_env"
+    conda activate cfFBI_env
     ```
 
 ### Create a samplesheet and configfile 
@@ -57,14 +57,14 @@ Kraken2 Classification Settings:
 - *database_dir*: Define the directory path where the Kraken2 database is located.
 - *k2_threshold*: Set the threshold value for Kraken2 classification.
 
-### Running the FBI-pipeline on an interactive node
+### Running the cfFBI-pipeline on an interactive node
 1. Start a screen session. 
 2. Request an interactive node for for running the jobs (long enough to finish all jobs of one liquid biopsy sample, e.g. 24 hours), with 450G mem, 16 cores. 
 3. Move to the `pipeline/` sub-directory within the cloned Git directory where your workflow resides.
 4. Activate your conda environment.
       ```bash
-    # Activate the environment "FBI_env"
-    conda activate FBI_env
+    # Activate the environment "cfFBI_env"
+    conda activate cfFBI_env
     ```
 5. Run the snakemake pipeline.
    ```bash
@@ -72,14 +72,14 @@ Kraken2 Classification Settings:
    --snakefile workflow/Snakefile_FOALS  --cores all --conda-frontend conda --use-conda
    ```
 
-### Running the FBI-pipeline by submitting jobs via [slurm](https://slurm.schedmd.com/documentation.html) scheduler:
+### Running the cfFBI-pipeline by submitting jobs via [slurm](https://slurm.schedmd.com/documentation.html) scheduler:
 1. Start a screen session. 
 2. Request an interactive node for submitting jobs (long enough for all jobs to finish, e.g. 48 hours), with 16G mem, 2 cores.
 3. Move to the `pipeline/` sub-directory within the cloned Git directory where your workflow resides.
 4. Activate your conda environment.
     ```bash
-    # Activate the environment "FBI_env"
-    conda activate FBI_env
+    # Activate the environment "cfFBI_env"
+    conda activate cfFBI_env
     ```
 5. Run the snakemake pipeline.
    ```bash
@@ -94,7 +94,7 @@ More information See [snakemake profile](https://snakemake.readthedocs.io/en/sta
 - Input fasta folder always should contains following files to start with `*R1*.fastq.gz, *R2*.fastq.gz`
 - The current pipeline version includes adapter sequence information utilized by the SRSLY Claret Kit, the KAPA Kit, and 384 IDT UMI's. If another library preparation method is employed, kindly update the `workflow/rules/trim.smk` file and append the adapter index sequences to the `resources/adapter_indexes/` directory.
 
-## FBI-Pipeline Employment for Publication Purposes 
+## cfFBI-Pipeline Employment for Publication Purposes 
 #### Comparing Library Preparations in a Foal's Liquid Biopsy Sample: SRSLY retention protocol (moderate/small) & bead-based size-selection (yes/no)
 
 ```bash
