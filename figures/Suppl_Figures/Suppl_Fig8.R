@@ -10,7 +10,8 @@ source("../Sourced/Elevated_bacteria.R")
 metadata <- all_basic_stats %>%
     filter(grepl(FID, pattern = "^F")) %>%
     mutate("Blood culture" = ifelse(Y.N.Blood.culture.positive == "Y" | 
-                                    FID == "F28", yes = "P", no = NA)) %>% 
+                                    FID == "F28", yes = "P", no = 
+                                    ifelse(nSIRS_class == "H", yes = "n/a", no = NA))) %>% 
     mutate("Age (days)"= DescTools::RoundTo(c(Foal.age.at.presentation..hours./24), FUN = "floor")) %>% 
     mutate(Outcome = ifelse(Lived == "Y", yes = "L", no = 
                      ifelse(Lived == "N", yes = "D", no = NA))) %>% 
@@ -22,7 +23,7 @@ metadata <- all_basic_stats %>%
     mutate(sum_count_abundance = NA) %>% 
     mutate(tmp_col = NA) 
 
-data <- fig3_contaminantFree_sumGenus_maxAbundance_sepsisGenera %>% 
+data <- df_contaminantFree_sumGenus_maxAbundance_sepsisGenera %>% 
         mutate(tmp_col = ifelse(sum_rel_abundance > max_H & 
                                 sum_rel_abundance < max_nSneg &
                                sum_count_abundance >= min_hard_count_genus, yes = "H", no = 
@@ -47,8 +48,12 @@ co_elevation_all <- rbind(data, metadata) %>%
         ggplot(aes(x = FID, y = variable)) +
             geom_point(data = . %>% filter(sum_rel_abundance != 0) , 
                        aes(x = FID, y = variable, size = -log10(sum_rel_abundance), col = tmp_col, shape = tmp_col)) + 
-            geom_text(data = . %>% filter(facets == "metadata") %>% filter(!is.na(label)),
+            geom_text(data = . %>% filter(facets == "metadata") %>% 
+                      filter(!is.na(label)) %>% filter(label != "n/a"),
                       aes(x = FID, y = variable, label = label), size = 3) + 
+            geom_text(data = . %>% filter(facets == "metadata") %>% 
+                      filter(!is.na(label)) %>% filter(label == "n/a"),
+                      aes(x = FID, y = variable, label = label), size = 2) + 
             theme_bw() + labs(col = "Abundance exceeds", shape = "Abundance exceeds", size = "Relative abundance,\n-log10", 
                             x = "", y = "") + 
             scale_color_manual(values = c("H" = "#6066B6", 
@@ -68,8 +73,6 @@ co_elevation_all <- rbind(data, metadata) %>%
                         axis.ticks = element_blank(),
                         axis.title.x = element_blank(),
                         strip.text.y = element_text(angle = 0, size = 12, hjust = 0), 
-                        panel.grid.major = element_blank(), 
-                        panel.grid.minor = element_blank()   
                 ) + 
             facet_grid(rows = vars(facets), cols = vars(nSIRS_class), scales = "free", space = "free", drop = TRUE) + 
             guides(col = guide_legend(override.aes = list(size = 5))) + 

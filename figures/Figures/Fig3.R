@@ -22,7 +22,12 @@ metadata <- all_basic_stats %>%
     mutate(sum_count_abundance = NA) %>% 
     mutate(tmp_col = NA) 
 
-data <- fig3_contaminantFree_sumGenus_maxAbundance_sepsisGenera %>% 
+metadata <- metadata %>% 
+	    mutate(label = ifelse(FID == "F09" & label == "P", yes = "#", label)) %>% 
+	        mutate(label = ifelse(FID == "F15" & label == "P", yes = "x", label)) %>% 
+		    mutate(label = ifelse(FID == "F20" & label == "P", yes = "$", label))
+
+data <- df_contaminantFree_sumGenus_maxAbundance_sepsisGenera %>% 
         mutate(tmp_col = ifelse(sum_rel_abundance > max_H & 
                                 sum_rel_abundance < max_nSneg &
                                sum_count_abundance >= min_hard_count_genus, yes = "H", no = 
@@ -70,16 +75,14 @@ co_elevation_Splus <- rbind(data, metadata) %>%
                         panel.spacing = unit(1, "lines"), 
                         axis.ticks = element_blank(),
                         axis.title.x = element_blank(),
-                        strip.text.y = element_text(angle = 0, size = 12, hjust = 0), 
-                        panel.grid.major = element_blank(), 
-                        panel.grid.minor = element_blank()   
+                        strip.text.y = element_text(angle = 0, size = 12, hjust = 0)   
                 ) + 
             facet_grid(rows = vars(facets), cols = vars(nSIRS_class), scales = "free", space = "free", drop = TRUE) + 
             guides(col = guide_legend(override.aes = list(size = 5))) + 
             scale_size_continuous(range = c(10, 1), breaks = c(1.5, 4.5, 7.5)) 
 
 
-ggsave(paste0("../../output_figures/Fig4_co-elevation_S+.png"), plot = co_elevation_Splus, 
+ggsave(paste0("../../output_figures/Fig3_co-elevation_S+.png"), plot = co_elevation_Splus, 
            width = 20, height = 14, units = "cm")
-ggsave(paste0("../../output_figures/Fig4_co-elevation_S+.pdf"), plot = co_elevation_Splus, 
+ggsave(paste0("../../output_figures/Fig3_co-elevation_S+.pdf"), plot = co_elevation_Splus, 
            width = 20, height = 14, units = "cm")

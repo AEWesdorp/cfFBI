@@ -14,6 +14,7 @@ require("ggh4x")
 require("cowplot")
 require("DescTools")
 require("Hmisc")
+require("reshape2")
 
 ## -----------------------------------------------------------------------------
 min_hard_count_species = 10
@@ -26,11 +27,11 @@ sepsis_genera <- c(sepsis_grampositive, sepsis_gramnegative)
 
 ## -----------------------------------------------------------------------------
 all_basic_stats <- read.csv(file = "../../output/02_tables/02_data_merged/all_basic_stats.csv") %>% as.data.frame()
-fig3_basics = read.csv(file = "../../output/02_tables/04_source_data/fig3_combined_long.csv") %>% as.data.frame()
+df_basics = read.csv(file = "../../output/02_tables/04_source_data/contaminantFree_bacteria_long.csv") %>% as.data.frame()
 
 ## -----------------------------------------------------------------------------
 ## Removal of the contaminants
-fig3_contaminantFree <- fig3_basics %>% 
+df_contaminantFree <- df_basics %>% 
     filter(Contaminant == "False") %>% 
     mutate(Contaminant = factor(Contaminant, level = unique(Contaminant))) %>% 
     mutate(Species_short = str_replace(Species, "^[^\\s]+\\s", "")) %>% 
@@ -41,7 +42,7 @@ fig3_contaminantFree <- fig3_basics %>%
 
 ## -----------------------------------------------------------------------------
 ## Preprocessing data for genus level assesment
-fig3_contaminantFree_sumGenus <- fig3_contaminantFree %>% 
+df_contaminantFree_sumGenus <- df_contaminantFree %>% 
     group_by(FID, nSIRS_class, nSIRS_score, Genus) %>% 
     dplyr::summarize(sum_rel_abundance = sum(Relative.abundance),
                      sum_count_abundance = sum(Exact.abundance), .groups = "keep") %>% 
@@ -50,22 +51,22 @@ fig3_contaminantFree_sumGenus <- fig3_contaminantFree %>%
     filter(sum(sum_rel_abundance) != 0) %>%
     ungroup()
 
-max_abundance_H <- fig3_contaminantFree_sumGenus %>%
+max_abundance_H <- df_contaminantFree_sumGenus %>%
         filter(nSIRS_class == "H") %>% 
         group_by(Genus) %>%
         dplyr::summarize(max_H = max(sum_rel_abundance), .groups = "keep")
     
-max_abundance_nSneg <- fig3_contaminantFree_sumGenus %>%
+max_abundance_nSneg <- df_contaminantFree_sumGenus %>%
         filter(nSIRS_class == "nS-") %>% 
         group_by(Genus) %>%
         dplyr::summarize(max_nSneg = max(sum_rel_abundance), .groups = "keep")
 
-max_abundance_Spos <- fig3_contaminantFree_sumGenus %>%
+max_abundance_Spos <- df_contaminantFree_sumGenus %>%
         filter(nSIRS_class == "S+") %>% 
         group_by(Genus) %>%
         dplyr::summarize(max_Spos = max(sum_rel_abundance), .groups = "keep")
 
-fig3_contaminantFree_sumGenus_maxAbundance <- fig3_contaminantFree_sumGenus %>%
+df_contaminantFree_sumGenus_maxAbundance <- df_contaminantFree_sumGenus %>%
         left_join(max_abundance_H, by = c("Genus")) %>% 
         left_join(max_abundance_nSneg, by = c("Genus")) %>% 
         left_join(max_abundance_Spos, by = c("Genus")) %>% 
@@ -77,11 +78,11 @@ fig3_contaminantFree_sumGenus_maxAbundance <- fig3_contaminantFree_sumGenus %>%
 
 ## -----------------------------------------------------------------------------
 #split table in sepsis causing pathogens and other genera
-fig3_contaminantFree_sumGenus_maxAbundance_otherGenera <- 
-    fig3_contaminantFree_sumGenus_maxAbundance %>% 
+df_contaminantFree_sumGenus_maxAbundance_otherGenera <- 
+    df_contaminantFree_sumGenus_maxAbundance %>% 
         filter(Genus %nin% sepsis_genera)
 
-fig3_contaminantFree_sumGenus_maxAbundance_sepsisGenera <- 
-    fig3_contaminantFree_sumGenus_maxAbundance %>% 
+df_contaminantFree_sumGenus_maxAbundance_sepsisGenera <- 
+    df_contaminantFree_sumGenus_maxAbundance %>% 
         filter(Genus %in% sepsis_genera) %>% 
         mutate(Genus = factor(Genus, levels = sepsis_genera))

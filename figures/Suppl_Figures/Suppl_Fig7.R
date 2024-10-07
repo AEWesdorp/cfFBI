@@ -10,7 +10,7 @@ source("../Sourced/Elevated_bacteria.R")
 list_legend <- list()
 list_plots <- list()
 for (GOI in sepsis_genera){
-    df_species_sep <- fig3_contaminantFree %>%    
+    df_species_sep <- df_contaminantFree %>%    
         filter(Genus == GOI) %>%   
 
         ungroup() %>%
@@ -24,7 +24,7 @@ for (GOI in sepsis_genera){
         select(c(FID, nSIRS_class, nSIRS_score, Taxa, rel_abundance, abs_abundance)) %>%
         mutate(tpe = "Species\nincl. sum species") 
 
-    df_species_sum <- fig3_contaminantFree %>%    
+    df_species_sum <- df_contaminantFree %>%    
         filter(Genus == GOI) %>%   
         mutate(Taxa = "Sum Species") %>% 
         group_by(FID, nSIRS_class, nSIRS_score, Taxa) %>% 
@@ -58,8 +58,8 @@ for (GOI in sepsis_genera){
                         axis.ticks = element_blank(),
                         axis.title.x = element_blank(),
                         strip.text = element_text(angle = 0, size = 12, hjust = 0), 
-                        panel.grid.major = element_blank(), 
-                        panel.grid.minor = element_blank() 
+			panel.grid.major = element_blank(), #element_line(colour = ifelse(log10(fig3_contaminantFree_sumGenus$sum_rel_abundance) <= 0, "gre", "white")),
+                        panel.grid.minor = element_blank() #element_line(colour = ifelse(log10(fig3_contaminantFree_sumGenus$sum_rel_abundance) <= 0, "gre", "white"))
                         ) + 
                 scale_x_log10(labels = custom__labels) + 
                 scale_size_continuous(range = c(10, 1)) + 
