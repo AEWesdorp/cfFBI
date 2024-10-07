@@ -86,8 +86,3 @@ ggsave(paste0("../../output_figures/Fig3_co-elevation_S+.png"), plot = co_elevat
            width = 20, height = 14, units = "cm")
 ggsave(paste0("../../output_figures/Fig3_co-elevation_S+.pdf"), plot = co_elevation_Splus, 
            width = 20, height = 14, units = "cm")
-<<<<<<< HEAD:figures/Figures/Fig3.R
-=======
-ggsave(paste0("../../output_figures/Fig4_co-elevation_S+.pdf"), plot = co_elevation_Splus, 
-           width = 20, height = 14, units = "cm")
->>>>>>> b976f75f694f4c79a20dfa93d04b6bb3de0d5b52:figures/Figures/Fig4.R
