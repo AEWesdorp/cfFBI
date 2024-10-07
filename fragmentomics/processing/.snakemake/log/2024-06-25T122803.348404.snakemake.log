@@ -1,4 +1,0 @@
-WorkflowError in line 14 of /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/fragmentomics/processing/Snakemake_fragmentomics:
-Failed to open source file /hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/fragmentomics/processing/rules/common.smk
-FileNotFoundError: [Errno 2] No such file or directory: '/hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/fragmentomics/processing/rules/common.smk'
-  File "/hpc/compgen/projects/cf-spi/cf-spi/analysis/ewesdorp/FBI/fragmentomics/processing/Snakemake_fragmentomics", line 14, in <module>
