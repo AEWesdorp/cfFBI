@@ -25,7 +25,7 @@ To use the cfFBI-pipeline, follow these steps:
 3. Create and Activate a Conda Environment:
     ```bash
     # Create a new empty environment called "cfFBI_env"
-    conda create -c conda-forge -c bioconda -n cfFBI_env snakemake
+    conda create -n cfFBI_env -f cfFBI_python_envs.yml
     # Activate the environment "cfFBI_env"
     conda activate cfFBI_env
     ```
