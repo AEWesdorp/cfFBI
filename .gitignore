@@ -9,4 +9,8 @@ pipeline/.snakemake/
 fragmentomics/.snakemake/
 fragmentomics/post_processing/OLD_*
 fragmentomics/post_processing/.ipynb_checkpoints/
+figures/Figures/.ipynb_checkpoints/
+figures/Suppl_Figures/.ipynb_checkpoints/
+pipeline/.DS_Store
+.DS_Store
 .idea
