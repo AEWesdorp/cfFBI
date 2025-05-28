@@ -26,7 +26,7 @@ Details of the pipeline, which processes paired-end Illumina sequencing data to 
 
 
 #### microbial
-... see: [microbial](https://github.com/AEWesdorp/cfFBI/tree/main/microbial)
+For processing of kraken classification output and mitocondrial read quantification, see: [microbial](https://github.com/AEWesdorp/cfFBI/tree/main/microbial)
 
 #### fragmentomics
 For details on the fragmentomic characteristics of the horse-derived cfDNA molecules analyzed in this study, see: [fragmentomics](https://github.com/AEWesdorp/cfFBI/tree/main/fragmentomics).
