@@ -41,26 +41,26 @@ def get_time_30_120(wildcards, attempt):
 rule all:
     input:
         #git version
-        expand("{OUTDIR}git-version.log", OUTDIR=OUTDIR),
+	expand("{OUTDIR}git-version.log", OUTDIR=OUTDIR),
         
         #concat_fastq
-        expand("{OUTDIR}results/raw_fastq/{sample_name}_R1.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
-        expand("{OUTDIR}results/raw_fastq/{sample_name}_R2.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}results/raw_fastq/{sample_name}_R1.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}results/raw_fastq/{sample_name}_R2.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
 	
         #fastqc
-        expand("{OUTDIR}done/f_fastqc/{sample_name}.done", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}done/f_fastqc/{sample_name}.done", sample_name=units['sample_name'], OUTDIR=OUTDIR),
 	
         #QC
-        expand("{OUTDIR}results/clean_fastq/{sample_name}_R1_trimmed_truncated.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
-        expand("{OUTDIR}results/clean_fastq/{sample_name}_R2_trimmed_truncated.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),        
-        
+	expand("{OUTDIR}results/clean_fastq/{sample_name}_R1_trimmed_truncated.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}results/clean_fastq/{sample_name}_R2_trimmed_truncated.fastq.gz", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+
 	#mapping to host
-        expand("{OUTDIR}results/host_mapping/{sample_name}_unmapped_host_r1.fq", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}results/host_mapping/{sample_name}_unmapped_host_r1.fq", sample_name=units['sample_name'], OUTDIR=OUTDIR),
 	expand("{OUTDIR}results/host_mapping/{sample_name}_alligned_host_pe_srt.bam", sample_name=units['sample_name'], OUTDIR=OUTDIR),
-        expand("{OUTDIR}results/host_mapping/{sample_name}_alligned_host_pe_srt.bam.bai", sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}results/host_mapping/{sample_name}_alligned_host_pe_srt.bam.bai", sample_name=units['sample_name'], OUTDIR=OUTDIR),
 
         #kraken output
-        expand("{OUTDIR}results/kraken2_report/after_host_mapping/{sample_name}_{database}_conf{k2_threshold}.report", database=config['database'], k2_threshold=config['k2_threshold'], sample_name=units['sample_name'], OUTDIR=OUTDIR),
+	expand("{OUTDIR}results/kraken2_report/after_host_mapping/{sample_name}_{database}_conf{k2_threshold}.report", database=config['database'], k2_threshold=config['k2_threshold'], sample_name=units['sample_name'], OUTDIR=OUTDIR),
 	
 	#bracken output 
 	expand("{OUTDIR}results/bracken_output/after_host_mapping/{sample_name}_{database}_conf{k2_threshold}.output", database=config['database'], k2_threshold=config['k2_threshold'], sample_name=units['sample_name'], OUTDIR=OUTDIR),
